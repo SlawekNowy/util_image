@@ -281,7 +281,7 @@ namespace uimg {
 #else
             //until we have support for opencl in linux use CPU.
             opts.bUseCGCompress = false;
-            opts.nEncodeWith = CMP_CPU_OCL;
+            opts.nEncodeWith = CMP_CPU;
 #endif
             opts.DestFormat = *cmpFormat;
             opts.SourceFormat = *origFormat;
