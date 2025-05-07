@@ -7,13 +7,17 @@ set(PROJ_NAME util_image)
 pr_add_library(${PROJ_NAME} SHARED)
 
 pr_add_dependency(${PROJ_NAME} vfilesystem TARGET PUBLIC)
-pr_add_dependency(${PROJ_NAME} zlib TARGET)
-pr_add_dependency(${PROJ_NAME} png_static TARGET)
+pr_add_dependency(${PROJ_NAME} lunasvg TARGET)
+
+pr_add_external_dependency(${PROJ_NAME} libpng LIBRARY PRIVATE)
+pr_add_external_dependency(${PROJ_NAME} libpng_build HEADER_ONLY PRIVATE)
+pr_add_external_dependency(${PROJ_NAME} zlib LIBRARY PRIVATE)
 
 pr_add_headers(${PROJ_NAME} "include/")
 pr_add_sources(${PROJ_NAME} "src/")
 
 pr_add_compile_definitions(${PROJ_NAME} -DUIMG_ENABLE_NVTT PUBLIC)
+pr_add_compile_definitions(${PROJ_NAME} -DUIMG_ENABLE_SVG PUBLIC)
 pr_add_compile_definitions(${PROJ_NAME} -DUIMG_DLL)
 
 set(COMPRESSONATOR_BASE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/third_party_libs/compressonator")
