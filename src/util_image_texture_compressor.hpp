@@ -27,6 +27,7 @@ namespace uimg {
 	class TextureCompressor {
 	  public:
 		static std::unique_ptr<TextureCompressor> Create();
+        virtual ~TextureCompressor();
 		struct CompressInfo {
 			std::function<const uint8_t *(uint32_t, uint32_t, std::function<void()> &)> getImageData;
 			std::function<void(const std::string &)> errorHandler;
