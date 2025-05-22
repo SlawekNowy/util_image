@@ -230,6 +230,7 @@ static void PrintDetails(char* data) {
 namespace uimg {
     class TextureCompressorCompressonator : public TextureCompressor {
 	  public:
+		virtual ~TextureCompressorCompressonator() override = default;
 		virtual std::optional<ResultData> Compress(const CompressInfo &compressInfo) override
         {
 			CMP_InitFramework();

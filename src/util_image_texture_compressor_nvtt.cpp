@@ -203,6 +203,7 @@ static nvtt::InputFormat get_nvtt_format(uimg::TextureInfo::InputFormat format)
 namespace uimg {
 	class TextureCompressorNvtt : public TextureCompressor {
 	  public:
+		virtual ~TextureCompressorNvtt() override = default;
 		virtual std::optional<ResultData> Compress(const CompressInfo &compressInfo) override
 		{
 			auto &textureSaveInfo = compressInfo.textureSaveInfo;
