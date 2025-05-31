@@ -93,32 +93,30 @@ if(${TEX_COMPRESSION_LIBRARY} EQUAL ${TEX_COMPRESSION_LIBRARY_NVTT})
 	#TODO: This would get shoved in. If TEX_COMPRESSION_LIBRARY would change to compressonator, this dep would be lost.
 	pr_add_dependency(${PROJ_NAME} squish TARGET PRIVATE)
 else()
-	set(OPTION_ENABLE_ALL_APPS OFF CACHE BOOL "Enable all apps" FORCE)
-	set(OPTION_BUILD_CMP_SDK ON CACHE BOOL "Build Compressonator SDK" FORCE)
-	set(OPTION_CMP_OPENCV ON CACHE BOOL "Use OpenCV" FORCE)
+	if(UNIX)
+		set(DEPENDENCY_COMPRESSONATOR_FRAMEWORK_INCLUDE "${DEPENDENCY_COMPRESSONATOR_SOURCE_DIR}/cmp_compressonatorlib")
+		set(DEPENDENCY_COMPRESSONATOR_FRAMEWORK_LIBRARY "${DEPENDENCY_COMPRESSONATOR_LIBRARY_DIR}/libCMP_Framework.so")
+		pr_add_external_dependency(${PROJ_NAME} compressonator_framework LIBRARY PRIVATE)
 
-	add_subdirectory("third_party_libs/compressonator")
+		set(DEPENDENCY_COMPRESSONATOR_LIBRARY "${DEPENDENCY_COMPRESSONATOR_LIBRARY_DIR}/libCMP_Compressonator.so")
+		pr_add_external_dependency(${PROJ_NAME} compressonator LIBRARY PRIVATE)
+	else()
+		set(DEPENDENCY_COMPRESSONATOR_FRAMEWORK_INCLUDE "${DEPENDENCY_COMPRESSONATOR_SOURCE_DIR}/cmp_compressonatorlib")
+		set(DEPENDENCY_COMPRESSONATOR_FRAMEWORK_LIBRARY "${DEPENDENCY_COMPRESSONATOR_LIBRARY_DIR}/CMP_Framework.lib")
+		pr_add_external_dependency(${PROJ_NAME} compressonator_framework LIBRARY PRIVATE)
 
-	add_dependencies(${PROJ_NAME} Image_DDS Image_EXR Image_KTX Image_TGA CMP_Compressonator CMP_Framework CMP_Common CMP_Core )
+		set(DEPENDENCY_COMPRESSONATOR_LIBRARY "${DEPENDENCY_COMPRESSONATOR_LIBRARY_DIR}/CMP_Compressonator.lib")
+		pr_add_external_dependency(${PROJ_NAME} compressonator LIBRARY PRIVATE)
 
+		set(DEPENDENCY_COMPRESSONATOR_CORE_LIBRARY "${DEPENDENCY_COMPRESSONATOR_LIBRARY_DIR}/CMP_Core.lib")
+		pr_add_external_dependency(${PROJ_NAME} compressonator_core LIBRARY PRIVATE)
 
-	if(WIN32)
-		#We need to copy dxcompiler.dll and dxil.dll to bin directory. Otherwise pragma with compressonator will fail.
-		install(FILES 
-		"${COMPRESSONATOR_BASE_PATH}/../common/lib/ext/dxc/bin/x64/dxcompiler.dll"
-		"${COMPRESSONATOR_BASE_PATH}/../common/lib/ext/dxc/bin/x64/dxil.dll"
-		DESTINATION "${CMAKE_INSTALL_PREFIX}/bin"
-		COMPONENT "${PRAGMA_INSTALL_COMPONENT}")
+		set(DEPENDENCY_COMPRESSONATOR_COMMON_LIBRARY "${DEPENDENCY_COMPRESSONATOR_LIBRARY_DIR}/CMP_Common.lib")
+		pr_add_external_dependency(${PROJ_NAME} compressonator_common LIBRARY PRIVATE)
 	endif()
-	
-	pr_add_dependency(${PROJ_NAME} CMP_Core TARGET LINK_ONLY PRIVATE)
-	pr_add_dependency(${PROJ_NAME} CMP_Framework TARGET LINK_ONLY PRIVATE)
-	
-	pr_add_dependency(${PROJ_NAME} CMP_Compressonator TARGET PRIVATE)
-	#pr_add_dependency(${PROJ_NAME} compressonator_openexr_half TARGET PRIVATE)
 
-	
-	#target_include_directories(${PROJ_NAME} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/third_party_libs/compressonator/cmp_framework/common/half/)
+	set(DEPENDENCY_COMPRESSONATOR_HALF_INCLUDE "${DEPENDENCY_COMPRESSONATOR_SOURCE_DIR}/cmp_framework/common/half")
+	pr_add_external_dependency(${PROJ_NAME} compressonator_half HEADER_ONLY PRIVATE)
 endif()
 set(BUILD_SHARED_LIBS ON CACHE BOOL ON FORCE)
 
